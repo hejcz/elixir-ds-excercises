@@ -116,15 +116,17 @@ defmodule AVLTree do
   defp do_delete(nil, _), do: nil
 
   # remove in left sub-tree
-  defp do_delete(%AVLTree{left: left, value: node_value} = tree, value)
+  defp do_delete(%AVLTree{left: left, right: right, value: node_value} = tree, value)
        when node_value > value do
-    %{tree | left: do_delete(left, value)}
+    new_left = do_delete(left, value)
+    rebalance(%{tree | left: new_left, height: 1 + max(height(new_left), height(right))})
   end
 
   # remove in right sub-tree
-  defp do_delete(%AVLTree{right: right, value: node_value} = tree, value)
+  defp do_delete(%AVLTree{right: right, left: left, value: node_value} = tree, value)
        when node_value < value do
-    %{tree | right: do_delete(right, value)}
+    new_right = do_delete(right, value)
+    rebalance(%{tree | right: new_right, height: 1 + max(height(left), height(new_right))})
   end
 
   # only left sub-tree
@@ -136,16 +138,16 @@ defmodule AVLTree do
   # two sub-trees
   defp do_delete(%AVLTree{left: left, right: right, value: value}, value) do
     {min_in_right_new_left, right_new_left_without_min} = remove_min_from_new_left(right)
-    %AVLTree{value: min_in_right_new_left, left: left, right: right_new_left_without_min}
+    rebalance(new_node(min_in_right_new_left, left, right_new_left_without_min))
   end
 
   defp remove_min_from_new_left(%AVLTree{left: nil, right: right, value: value}) do
     {value, right}
   end
 
-  defp remove_min_from_new_left(%AVLTree{left: left, right: right, value: value} = tree) do
+  defp remove_min_from_new_left(%AVLTree{left: left} = tree) do
     {min_value, new_new_left} = remove_min_from_new_left(left)
-    {min_value, %{tree | left: new_new_left, right: right, value: value}}
+    {min_value, rebalance(%{tree | left: new_new_left})}
   end
 
   def to_sorted_list(tree) do

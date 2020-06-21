@@ -193,6 +193,72 @@ defmodule AVLTreeTest do
     assert parse_tree(before) |> AVLTree.add(15) == parse_tree(expected)
   end
 
+  test "delete leaf" do
+    before = ~s(
+                  5
+               /     \\
+              2        7
+             /  \\   /  \\
+            1    4  6     9
+                /         \\
+               3           16
+        )
+    expected = ~s(
+                  5
+               /     \\
+              2        9
+             /  \\    / \\
+            1    4   7   16
+                /
+               3
+        )
+    assert parse_tree(before) |> AVLTree.delete(6) == parse_tree(expected)
+  end
+
+  test "delete root" do
+    before = ~s(
+                  5
+               /     \\
+              2        7
+             /  \\   /  \\
+            1    4  6     9
+                /         \\
+               3           16
+        )
+    expected = ~s(
+                  6
+               /     \\
+              2        9
+             /  \\    / \\
+            1    4   7   16
+                /
+               3
+        )
+    assert parse_tree(before) |> AVLTree.delete(5) == parse_tree(expected)
+  end
+
+  test "delete internal node" do
+    before = ~s(
+                  5
+               /     \\
+              2        7
+             /  \\   /  \\
+            1    4  6     9
+                /         \\
+               3           16
+        )
+    expected = ~s(
+                  5
+               /     \\
+              2        9
+             /  \\    / \\
+            1    4   6   16
+                /
+               3
+        )
+    assert parse_tree(before) |> AVLTree.delete(7) == parse_tree(expected)
+  end
+
   defp parse_tree(tree) do
     values =
       tree
