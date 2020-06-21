@@ -79,43 +79,24 @@ defmodule BSTree do
   defp do_delete(%BSTree{left: nil, right: right, value: value}, value), do: right
 
   # two sub-trees
-  defp do_delete(%BSTree{left: left, right: right, value: value}, value) do
-    {min_in_right_subtree, right_subtree_without_min} = remove_min_from_subtree(right)
-    %BSTree{value: min_in_right_subtree, left: left, right: right_subtree_without_min}
+  defp do_delete(%BSTree{value: value} = tree, value) do
+    {min_in_right_subtree, right_subtree_without_min} = remove_min_from_subtree(tree.right)
+    %BSTree{value: min_in_right_subtree, left: tree.left, right: right_subtree_without_min}
   end
 
   defp remove_min_from_subtree(%BSTree{left: nil, right: right, value: value}) do
     {value, right}
   end
 
-  defp remove_min_from_subtree(%BSTree{left: left, right: right, value: value} = tree) do
-    {min_value, new_subtree} = remove_min_from_subtree(left)
-    {min_value, %{tree | left: new_subtree, right: right, value: value}}
+  defp remove_min_from_subtree(tree) do
+    {min_value, new_subtree} = remove_min_from_subtree(tree.left)
+    {min_value, %{tree | left: new_subtree}}
   end
 
-  def to_sorted_list(tree) do
-    to_sorted_list(tree, [])
-  end
+end
 
-  defp to_sorted_list(nil, acc) do
-    acc
-  end
-
-  defp to_sorted_list(%BSTree{left: left, right: right, value: value}, acc) do
-    to_sorted_list(left, [value | to_sorted_list(right, acc)])
-  end
-
-  def min(%BSTree{left: left, value: value}) do
-    case left do
-      nil -> value
-      _ -> min(left)
-    end
-  end
-
-  def max(%BSTree{right: right, value: value}) do
-    case right do
-      nil -> value
-      _ -> max(right)
-    end
-  end
+defimpl Tree, for: BSTree do
+  def right(%BSTree{right: right}), do: right
+  def left(%BSTree{left: left}), do: left
+  def value(%BSTree{value: value}), do: value
 end
