@@ -92,4 +92,31 @@ defmodule BSTree do
     {min_value, new_subtree} = remove_min_from_subtree(left)
     {min_value, %{tree | left: new_subtree, right: right, value: value}}
   end
+
+  def to_sorted_list(tree) do
+    to_sorted_list(tree, [])
+  end
+
+  defp to_sorted_list(nil, acc) do
+    acc
+  end
+
+  defp to_sorted_list(%BSTree{left: left, right: right, value: value}, acc) do
+    to_sorted_list(left, [value | to_sorted_list(right, acc)])
+  end
+
+  def min(%BSTree{left: left, value: value}) do
+    case left do
+      nil -> value
+      _ -> min(left)
+    end
+  end
+
+  def max(%BSTree{right: right, value: value}) do
+    case right do
+      nil -> value
+      _ -> max(right)
+    end
+  end
+
 end
