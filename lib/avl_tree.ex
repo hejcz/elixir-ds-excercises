@@ -15,43 +15,74 @@ defmodule AVLTree do
   end
 
   # does not need to be rebalanced
-  def add(%AVLTree{left: nil, value: node_value, height: height} = tree, value) when node_value > value do
+  def add(%AVLTree{left: nil, value: node_value, height: height} = tree, value)
+      when node_value > value do
     %{tree | left: %AVLTree{value: value, height: 1}, height: max(height, 2)}
   end
 
   # does not need to be rebalanced
-  def add(%AVLTree{right: nil, value: node_value, height: height} = tree, value) when node_value < value do
+  def add(%AVLTree{right: nil, value: node_value, height: height} = tree, value)
+      when node_value < value do
     %{tree | right: %AVLTree{value: value, height: 1}, height: max(height, 2)}
   end
 
-  def add(%AVLTree{left: left, value: node_value, height: height} = tree, value) when node_value > value do
+  def add(%AVLTree{left: left, value: node_value, height: height} = tree, value)
+      when node_value > value do
     new_left = add(left, value)
-    new_subtree = %{tree | left: new_left, height: max(new_left.height + 1, height)}
-    rebalance(balance(new_subtree), new_subtree)
+    rebalance(%{tree | left: new_left, height: max(new_left.height + 1, height)})
   end
 
-  def add(%AVLTree{right: right, value: node_value, height: height} = tree, value) when node_value < value do
+  def add(%AVLTree{right: right, value: node_value, height: height} = tree, value)
+      when node_value < value do
     new_right = add(right, value)
-    new_subtree = %{tree | right: new_right, height: max(new_right.height + 1, height)}
-    rebalance(balance(new_subtree), new_subtree)
+    rebalance(%{tree | right: new_right, height: max(new_right.height + 1, height)})
   end
 
   # skip duplicates
   def add(tree, _), do: tree
 
+  defp rebalance(tree) do
+    rebalance(balance(tree), tree)
+  end
+
   # more over left
-  defp rebalance(2, %AVLTree{left: left, right: right, value: node_value}) do
-    %AVLTree{value: left.value, left: left.left, right: %AVLTree{value: node_value, left: left.right, right: right, height: height(right) + 1}, height: left.height}
+  defp rebalance(-2, %AVLTree{left: left} = tree) do
+    case balance(left) do
+      1 -> rotate_right(%AVLTree{tree | left: rotate_left(left)})
+      -1 -> rotate_right(tree)
+    end
   end
 
   # more over right
-  defp rebalance(-2, %AVLTree{left: left, right: right, value: node_value}) do
-    %AVLTree{value: right.value, right: right.right, left: %AVLTree{value: node_value, right: right.left, left: left, height: height(left) + 1}, height: right.height}
+  defp rebalance(2, %AVLTree{right: right} = tree) do
+    case balance(right) do
+      -1 -> rotate_left(%AVLTree{tree | right: rotate_right(right)})
+      1 -> rotate_left(tree)
+    end
   end
 
   defp rebalance(_, subtree), do: subtree
 
-  defp balance(%AVLTree{left: left, right: right}), do: height(left) - height(right)
+  defp new_node(value, left, right) do
+    %AVLTree{
+      value: value,
+      right: right,
+      left: left,
+      height: max(height(left), height(right)) + 1
+    }
+  end
+
+  defp rotate_left(%AVLTree{right: right, left: left, value: node_value}) do
+    new_node(right.value, new_node(node_value, left, right.left), right.right)
+  end
+
+  defp rotate_right(%AVLTree{right: right, left: left, value: node_value}) do
+    new_node(left.value, left.left, new_node(node_value, left.right, right))
+  end
+
+  defp balance(nil), do: 0
+
+  defp balance(%AVLTree{left: left, right: right}), do: height(right) - height(left)
 
   defp height(nil), do: 0
 
@@ -142,5 +173,4 @@ defmodule AVLTree do
       _ -> max(right)
     end
   end
-
 end

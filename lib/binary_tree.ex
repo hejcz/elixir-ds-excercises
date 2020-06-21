@@ -118,5 +118,4 @@ defmodule BSTree do
       _ -> max(right)
     end
   end
-
 end

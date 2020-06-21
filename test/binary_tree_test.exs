@@ -62,14 +62,13 @@ defmodule BinaryTreeTest do
   end
 
   test "remove all nodes but one" do
-
     tree = example_tree()
 
     assert tree |> delete(10) |> delete(6) |> delete(12) ==
              Enum.reduce(
                [7, 3, 4, 11, 8, 13],
                empty(),
-               & add(&2, &1)
+               &add(&2, &1)
              )
   end
 
