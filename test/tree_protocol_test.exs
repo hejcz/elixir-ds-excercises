@@ -8,7 +8,9 @@ defmodule GeneralTreeAlgorithmsTest do
   end
 
   test "AVL min" do
-    tree = AVLTree.empty() |> AVLTree.add(4) |> AVLTree.add(1) |> AVLTree.add(5) |> AVLTree.add(-1)
+    tree =
+      AVLTree.empty() |> AVLTree.add(4) |> AVLTree.add(1) |> AVLTree.add(5) |> AVLTree.add(-1)
+
     assert GeneralTreeAlgorithms.min(tree) == -1
   end
 
@@ -18,7 +20,9 @@ defmodule GeneralTreeAlgorithmsTest do
   end
 
   test "AVL max" do
-    tree = AVLTree.empty() |> AVLTree.add(4) |> AVLTree.add(1) |> AVLTree.add(6) |> AVLTree.add(-1)
+    tree =
+      AVLTree.empty() |> AVLTree.add(4) |> AVLTree.add(1) |> AVLTree.add(6) |> AVLTree.add(-1)
+
     assert GeneralTreeAlgorithms.max(tree) == 6
   end
 
@@ -28,7 +32,9 @@ defmodule GeneralTreeAlgorithmsTest do
   end
 
   test "AVL to list" do
-    tree = AVLTree.empty() |> AVLTree.add(4) |> AVLTree.add(1) |> AVLTree.add(6) |> AVLTree.add(-1)
+    tree =
+      AVLTree.empty() |> AVLTree.add(4) |> AVLTree.add(1) |> AVLTree.add(6) |> AVLTree.add(-1)
+
     assert GeneralTreeAlgorithms.to_sorted_list(tree) == [-1, 1, 4, 6]
   end
 end

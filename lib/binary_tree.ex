@@ -92,7 +92,6 @@ defmodule BSTree do
     {min_value, new_subtree} = remove_min_from_subtree(tree.left)
     {min_value, %{tree | left: new_subtree}}
   end
-
 end
 
 defimpl Tree, for: BSTree do
