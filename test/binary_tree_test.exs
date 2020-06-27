@@ -11,10 +11,10 @@ defmodule BinaryTreeTest do
 
   test "contains" do
     tree = example_tree()
-    assert contains?(tree, 4) == true
-    assert contains?(tree, 11) == true
-    assert contains?(tree, 22) == false
-    assert contains?(tree, 1) == false
+    assert GeneralTreeAlgorithms.contains?(tree, 4) == true
+    assert GeneralTreeAlgorithms.contains?(tree, 11) == true
+    assert GeneralTreeAlgorithms.contains?(tree, 22) == false
+    assert GeneralTreeAlgorithms.contains?(tree, 1) == false
   end
 
   test "remove leaf" do
