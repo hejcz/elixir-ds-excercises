@@ -10,7 +10,6 @@ defmodule RBTree do
   3. AVL trees store balance factors or heights with each node, thus requires storage for an integer per node whereas Red Black Tree requires only 1 bit of information per node.
   4. Red Black Trees are used in most of the language libraries like map, multimap, multiset in C++ whereas AVL trees are used in databases where faster retrievals are required.
   """
-
   alias RBTree.Node
 
   def empty do
@@ -40,7 +39,25 @@ defmodule RBTree do
   defp repaint(
          tree = %Node{
            value: grandparent_value,
-           right: %Node{value: right_value},
+           right: %Node{value: right_value}
+         },
+         value
+       ) do
+    cond do
+      grandparent_value < value and right_value > value ->
+        repaint(tree, tree.right, tree.left, tree.right.left)
+
+      grandparent_value < value and right_value < value ->
+        repaint(tree, tree.right, tree.left, tree.right.right)
+
+      true ->
+        tree
+    end
+  end
+
+  defp repaint(
+         tree = %Node{
+           value: grandparent_value,
            left: %Node{value: left_value}
          },
          value
@@ -51,12 +68,6 @@ defmodule RBTree do
 
       grandparent_value > value and left_value < value ->
         repaint(tree, tree.left, tree.right, tree.left.right)
-
-      grandparent_value < value and right_value > value ->
-        repaint(tree, tree.right, tree.left, tree.right.left)
-
-      grandparent_value < value and right_value < value ->
-        repaint(tree, tree.right, tree.left, tree.right.right)
 
       true ->
         tree
@@ -92,7 +103,7 @@ defmodule RBTree do
   defp repaint(
          grandparent = %Node{value: grandparent_value},
          parent = %Node{color: :red, value: parent_value},
-         _uncle = %Node{color: :black},
+         _uncle,
          node = %Node{color: :red, value: value}
        ) do
     cond do
