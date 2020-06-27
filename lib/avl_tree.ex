@@ -87,22 +87,6 @@ defmodule AVLTree do
 
   defp height(tree), do: tree.height
 
-  def contains?(%AVLTree{value: value}, value), do: true
-
-  def contains?(%AVLTree{value: node_value} = tree, value) when node_value < value do
-    case tree.right do
-      nil -> false
-      _ -> contains?(tree.right, value)
-    end
-  end
-
-  def contains?(%AVLTree{value: node_value} = tree, value) when node_value > value do
-    case tree.left do
-      nil -> false
-      _ -> contains?(tree.left, value)
-    end
-  end
-
   # remove root
   def delete(%AVLTree{left: nil, right: nil, value: value}, value), do: empty()
 
@@ -156,5 +140,4 @@ defimpl Tree, for: AVLTree do
   def value(%AVLTree{value: value}), do: value
   def add(tree, value), do: AVLTree.add(tree, value)
   def delete(tree, value), do: AVLTree.delete(tree, value)
-  def contains?(tree, value), do: AVLTree.contains?(tree, value)
 end

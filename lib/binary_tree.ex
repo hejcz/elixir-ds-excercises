@@ -33,22 +33,6 @@ defmodule BSTree do
   # skip duplicates
   def add(tree, _), do: tree
 
-  def contains?(%BSTree{value: value}, value), do: true
-
-  def contains?(%BSTree{right: right, value: node_value}, value) when node_value < value do
-    case right do
-      nil -> false
-      _ -> contains?(right, value)
-    end
-  end
-
-  def contains?(%BSTree{left: left, value: node_value}, value) when node_value > value do
-    case left do
-      nil -> false
-      _ -> contains?(left, value)
-    end
-  end
-
   # remove root
   def delete(%BSTree{left: nil, right: nil, value: value}, value), do: empty()
 
@@ -100,5 +84,4 @@ defimpl Tree, for: BSTree do
   def value(%BSTree{value: value}), do: value
   def add(tree, value), do: BSTree.add(tree, value)
   def delete(tree, value), do: BSTree.delete(tree, value)
-  def contains?(tree, value), do: BSTree.contains?(tree, value)
 end
