@@ -98,4 +98,7 @@ defimpl Tree, for: BSTree do
   def right(%BSTree{right: right}), do: right
   def left(%BSTree{left: left}), do: left
   def value(%BSTree{value: value}), do: value
+  def add(tree, value), do: BSTree.add(tree, value)
+  def delete(tree, value), do: BSTree.delete(tree, value)
+  def contains?(tree, value), do: BSTree.contains?(tree, value)
 end

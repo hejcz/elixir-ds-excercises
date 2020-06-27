@@ -2,6 +2,9 @@ defprotocol Tree do
   def right(tree)
   def left(tree)
   def value(tree)
+  def add(tree, value)
+  def delete(tree, value)
+  def contains?(tree, value)
 end
 
 defmodule GeneralTreeAlgorithms do

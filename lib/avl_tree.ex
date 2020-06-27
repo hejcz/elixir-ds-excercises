@@ -154,4 +154,7 @@ defimpl Tree, for: AVLTree do
   def right(%AVLTree{right: right}), do: right
   def left(%AVLTree{left: left}), do: left
   def value(%AVLTree{value: value}), do: value
+  def add(tree, value), do: AVLTree.add(tree, value)
+  def delete(tree, value), do: AVLTree.delete(tree, value)
+  def contains?(tree, value), do: AVLTree.contains?(tree, value)
 end
